@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuWaLink | WhatsApp Link Generator</title>
+    <link rel="icon" type="image/png" href="IMG/icon_200x200.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #010409;
+            --surface: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --primary: #238636;
+            --primary-hover: #2ea043;
+            --text: #f0f6fc;
+            --text-muted: #8b949e;
+            --bubble-bg: #005c4b;
+            --bubble-fg: #e9edef;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #f6f8fa;
+            --card: #ffffff;
+            --border: #d0d7de;
+            --primary: #25D366;
+            --primary-hover: #1da851;
+            --text: #1f2328;
+            --text-muted: #636c76;
+            --bubble-bg: #d9fdd3;
+            --bubble-fg: #111b21;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        /* --- Header --- */
+        header {
+            height: 80px;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-action {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-action:hover {
+            border-color: var(--text-muted);
+            color: var(--text);
+        }
+
+        /* --- Main Layout --- */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 968px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hero {
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        select,
+        input,
+        textarea {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 100%;
+            transition: var(--transition);
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(35, 134, 54, 0.2);
+        }
+
+        .phone-code {
+            width: 140px;
+            cursor: pointer;
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+            margin-bottom: 8px;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .btn-generate {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-generate:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        /* --- Preview --- */
+        .preview-label {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mockup {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .bubble {
+            background-color: var(--bubble-bg);
+            color: var(--bubble-fg);
+            padding: 12px 16px;
+            border-radius: 0 15px 15px 15px;
+            max-width: 80%;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Result --- */
+        .result-area {
+            margin-top: 30px;
+            display: none;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box {
+            background-color: rgba(63, 185, 80, 0.1);
+            border: 1px dashed var(--primary);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .link-text {
+            color: var(--primary);
+            word-break: break-all;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .qr-container canvas {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .btn-secondary {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="#" class="logo">💬 <span>TuWaLink</span></a>
+        <div class="nav-actions">
+            <button class="btn-action" id="langToggle">🇪🇸 ESP</button>
+            <button class="btn-action" id="themeToggle">☀️ LIGHT</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="left">
+            <div class="hero">
+                <h1 id="heroTitle">Create your Personalized Link</h1>
+                <p id="heroDesc">Generate direct links to your WhatsApp chat in seconds.</p>
+            </div>
+
+            <div class="card">
+                <label for="phone" id="lblPhone">WhatsApp Number</label>
+                <div class="input-group">
+                    <input type="text" id="phone" placeholder="+34 600 000 000">
+                </div>
+
+                <label for="message" id="lblMsg">Message (Optional)</label>
+                <textarea id="message" placeholder="Hi, I'm interested in your product..."></textarea>
+                <div class="char-count" id="charCount">0 / 1000 chars</div>
+
+                <button class="btn-generate" id="genBtn">⚡ Generate Link</button>
+
+                <div class="result-area" id="resultArea">
+                    <div class="result-box">
+                        <div class="link-text" id="resultLink"></div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-secondary" id="copyBtn">📋 Copy Link</button>
+                            <button class="btn-secondary" id="openBtn">🌐 Open</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="right">
+            <h2 class="preview-label">👁 <span id="lblPreview">Preview</span></h2>
+            <div class="mockup" id="mockup">
+                <div class="bubble" id="bubble">Type to preview...</div>
+            </div>
+
+            <div class="qr-container" id="qrContainer">
+                <!-- QR will be rendered here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+    <script>
+        const i18n = {
+            en: {
+                lang: "🇪🇸 ESP", heroTitle: "Create your Personalized Link", heroDesc: "Generate direct links to your WhatsApp chat in seconds.",
+                lblPhone: "Number (+Country Code)", lblMsg: "Message (Optional)", charCount: "chars", genBtn: "⚡ Generate Link",
+                lblPreview: "Preview", bubbleHint: "Type to preview...", copyBtn: "📋 Copy Link", copySuccess: "✅ Copied!",
+                phonePlaceholder: "+34 600 000 000"
+            },
+            es: {
+                lang: "🇺🇸 ENG", heroTitle: "Crea tu Enlace Personalizado", heroDesc: "Genera links directos a tu chat de WhatsApp en segundos.",
+                lblPhone: "Número (+Código País)", lblMsg: "Mensaje (Opcional)", charCount: "caracteres", genBtn: "⚡ Generar Enlace",
+                lblPreview: "Vista Previa", bubbleHint: "Escribe para previsualizar...", copyBtn: "📋 Copiar Link", copySuccess: "✅ ¡Copiado!",
+                phonePlaceholder: "+34 600 000 000"
+            }
+        };
+
+        let currentLang = 'en';
+        let currentTheme = 'dark';
+
+        // Elements
+        const phoneInput = document.getElementById('phone');
+        const msgInput = document.getElementById('message');
+        const bubble = document.getElementById('bubble');
+        const charCount = document.getElementById('charCount');
+        const langToggle = document.getElementById('langToggle');
+        const themeToggle = document.getElementById('themeToggle');
+        const genBtn = document.getElementById('genBtn');
+        const resultArea = document.getElementById('resultArea');
+        const resultLink = document.getElementById('resultLink');
+        const qrContainer = document.getElementById('qrContainer');
+
+        // Logic
+        msgInput.addEventListener('input', () => {
+            const val = msgInput.value;
+            bubble.innerText = val || i18n[currentLang].bubbleHint;
+            charCount.innerText = `${val.length} / 1000 ${i18n[currentLang].charCount}`;
+        });
+
+        langToggle.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'es' : 'en';
+            updateLang();
+        });
+
+        themeToggle.addEventListener('click', () => {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', currentTheme);
+            themeToggle.innerText = currentTheme === 'dark' ? '☀️ LIGHT' : '🌙 DARK';
+        });
+
+        genBtn.addEventListener('click', () => {
+            const phone = phoneInput.value.replace(/\D/g, '');
+            if (!phone) return alert(currentLang === 'en' ? 'Enter a number with country code' : 'Ingresa un número con código de país');
+
+            const msg = encodeURIComponent(msgInput.value);
+            const url = `https://wa.me/${phone}${msg ? '?text=' + msg : ''}`;
+
+            resultLink.innerText = url;
+            resultArea.style.display = 'block';
+
+            // Generate QR
+            qrContainer.innerHTML = '';
+            const canvas = document.createElement('canvas');
+            QRCode.toCanvas(canvas, url, { width: 200, margin: 2 }, (error) => {
+                if (error) console.error(error);
+                qrContainer.appendChild(canvas);
+            });
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(resultLink.innerText);
+            const btn = document.getElementById('copyBtn');
+            const orig = btn.innerText;
+            btn.innerText = i18n[currentLang].copySuccess;
+            setTimeout(() => btn.innerText = i18n[currentLang].copyBtn, 2000);
+        });
+
+        document.getElementById('openBtn').addEventListener('click', () => {
+            window.open(resultLink.innerText, '_blank');
+        });
+
+        function updateLang() {
+            const t = i18n[currentLang];
+            langToggle.innerText = t.lang;
+            document.getElementById('heroTitle').innerText = t.heroTitle;
+            document.getElementById('heroDesc').innerText = t.heroDesc;
+            document.getElementById('lblPhone').innerText = t.lblPhone;
+            document.getElementById('lblMsg').innerText = t.lblMsg;
+            document.getElementById('genBtn').innerText = t.genBtn;
+            document.getElementById('lblPreview').innerText = t.lblPreview;
+            document.getElementById('copyBtn').innerText = t.copyBtn;
+            phoneInput.placeholder = t.phonePlaceholder;
+            if (!msgInput.value) bubble.innerText = t.bubbleHint;
+            charCount.innerText = `${msgInput.value.length} / 1000 ${t.charCount}`;
+        }
+    </script>
+</body>
+
+</html>
